@@ -8,11 +8,11 @@ export default class UsersController {
     this.usersService = new UsersService();
   }
 
-  finsOne = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+  login = async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
     try {
-      const users = await this.usersService.findOne({ email, password });
-      res.status(200).json(users);
+      const token = await this.usersService.login(email);
+      res.status(200).json(token);
     } catch (error) {
       next(error);
     }

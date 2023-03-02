@@ -7,22 +7,24 @@ const usersService = new UsersService();
 
 function validateEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   return emailRegex.test(email);
 }
 
 async function validatePassword(user: IUsers): Promise<boolean> {
   if (user.password.length >= 6) {
-    const userInfo = await usersService.findOne(user);
+    const userInfo = await usersService.findByEmail(user);
+
     if (userInfo) return bcrypt.compareSync(user.password, userInfo.password);
   }
   return false;
 }
 
-export default function validateUserInfo(req: Request, res: Response, next:NextFunction) {
+export default async function validateUserInfo(req: Request, res: Response, next:NextFunction) {
   const { email, password } = req.body;
-  if (!email && !password) return res.status(401).json({ message: 'Invalid email or password' });
+  if (!email || !password) return res.status(400).json({ message: 'All fields must be filled' });
   const isValidEmail = validateEmail(email);
-  const isValidPassword = validatePassword({ email, password });
+  const isValidPassword = await validatePassword({ email, password });
   if (!isValidEmail || !isValidPassword) {
     return res.status(401).json(
       { message: 'Invalid email or password' },

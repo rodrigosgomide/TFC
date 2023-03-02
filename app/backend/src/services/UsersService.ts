@@ -1,26 +1,28 @@
 import IUsers from '../interfaces/IUsers';
 import Users from '../database/models/UsersModel';
+import tokenGenerator from '../auth/JWT';
 
 export default class UsersService {
   model;
+  token: string;
 
   constructor() {
     this.model = Users;
+    this.token = '';
   }
 
-  async findOne(user: IUsers): Promise<IUsers | null> {
+  async findByEmail(user: IUsers): Promise<IUsers | null> {
     const userInfo = await this.model.findOne({
       where: {
         email: user.email,
-        password: user.password,
       },
     });
 
     return userInfo;
   }
 
-//   async findById(id: number): Promise<IUsers | null> {
-//     const users = await this.model.findByPk(id);
-//     return users;
-//   }
+  login(email: string): string {
+    this.token = tokenGenerator(email);
+    return this.token;
+  }
 }
