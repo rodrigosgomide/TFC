@@ -3,5 +3,5 @@ export default interface IUsers {
   username?: string;
   role?: string;
   email: string;
-  password: string;
+  password?: string;
 }

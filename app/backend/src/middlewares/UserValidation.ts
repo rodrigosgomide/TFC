@@ -12,10 +12,10 @@ function validateEmail(email: string): boolean {
 }
 
 async function validatePassword(user: IUsers): Promise<boolean> {
-  if (user.password.length >= 6) {
+  if (user.password && user.password.length >= 6) {
     const userInfo = await usersService.findByEmail(user);
 
-    if (userInfo) return bcrypt.compareSync(user.password, userInfo.password);
+    if (userInfo?.password) return bcrypt.compareSync(user.password, userInfo.password);
   }
   return false;
 }
