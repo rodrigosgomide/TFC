@@ -1,6 +1,7 @@
 import ITeams from '../interfaces/ITeams';
 import Matches from '../database/models/MatchesModel';
 import Teams from '../database/models/TeamsModel';
+import IScore from '../interfaces/IScore';
 
 export default class MatchesService {
   model;
@@ -36,7 +37,7 @@ export default class MatchesService {
     return matches;
   }
 
-  async updateById(id: number): Promise<object> {
+  async finishById(id: number): Promise<object> {
     await this.model.update({ inProgress: false }, {
       where: {
         id,
@@ -45,5 +46,17 @@ export default class MatchesService {
     });
 
     return { message: 'Finished' };
+  }
+
+  async updateById(matchInfo: IScore): Promise<object> {
+    await this.model.update({
+      homeTeamGoals: matchInfo.homeTeamGoals,
+      awayTeamGoals: matchInfo.awayTeamGoals }, {
+      where: {
+        id: matchInfo.id,
+      },
+    });
+
+    return { message: 'Ok' };
   }
 }

@@ -22,10 +22,24 @@ export default class MatchesController {
     }
   };
 
-  updateById = async (req: Request, res: Response, next: NextFunction) => {
+  finishById = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const message = await this.matchesService.updateById(Number(id));
+      const message = await this.matchesService.finishById(Number(id));
+      return res.status(200).json(message);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateById = async (req: Request, res: Response, next: NextFunction) => {
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { id } = req.params;
+    try {
+      const message = await this.matchesService.updateById({
+        homeTeamGoals,
+        awayTeamGoals,
+        id: Number(id) });
       return res.status(200).json(message);
     } catch (error) {
       next(error);

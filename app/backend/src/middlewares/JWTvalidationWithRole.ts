@@ -7,7 +7,7 @@ import UsersService from '../services/UsersService';
 const secret = process.env.JWT_SECRET || 'cruzeirao_cabuloso';
 const usersService = new UsersService();
 
-export default async function JTWvalidation(
+export default async function JTWvalidationWithRole(
   req: Request,
   res: Response,
   next:NextFunction,
@@ -21,8 +21,9 @@ export default async function JTWvalidation(
   try {
     const decoded = jwt.verify(token, secret) as JwtPayload;
 
-    await usersService.findByEmail({ email: decoded.data.email });
+    const user = await usersService.findByEmail({ email: decoded.data.email });
 
+    req.body = { role: user?.role };
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Token must be a valid token' });
