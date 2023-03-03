@@ -2,6 +2,7 @@ import ITeams from '../interfaces/ITeams';
 import Matches from '../database/models/MatchesModel';
 import Teams from '../database/models/TeamsModel';
 import IScore from '../interfaces/IScore';
+import INewMatch from '../interfaces/INewMatch';
 
 export default class MatchesService {
   model;
@@ -58,5 +59,18 @@ export default class MatchesService {
     });
 
     return { message: 'Ok' };
+  }
+
+  async insertMatch(matchInfo: INewMatch): Promise<object> {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = matchInfo;
+
+    const newMatch = await this.model.create({
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    return newMatch;
   }
 }

@@ -45,4 +45,13 @@ export default class MatchesController {
       next(error);
     }
   };
+
+  insertMatch = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newMatch = await this.matchesService.insertMatch(req.body);
+      return res.status(201).json(newMatch);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
