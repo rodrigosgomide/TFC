@@ -17,4 +17,13 @@ export default class TeamsService {
     const teams = await this.model.findByPk(id);
     return teams;
   }
+
+  async findAllNames(): Promise<ITeams[]> {
+    const teams = await this.model.findAll({
+      attributes: {
+        exclude: ['id'],
+      },
+    });
+    return teams;
+  }
 }

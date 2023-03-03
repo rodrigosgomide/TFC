@@ -18,4 +18,9 @@ export default class TeamsController {
     const team = await this.teamsService.findById(Number(id));
     res.status(200).json(team);
   };
+
+  findAllNames = async (_req: Request, res: Response, _next: NextFunction) => {
+    const teams = await this.teamsService.findAllNames();
+    res.status(200).json(teams);
+  };
 }
