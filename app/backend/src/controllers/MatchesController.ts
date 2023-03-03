@@ -8,19 +8,17 @@ export default class MatchesController {
     this.matchesService = new MatchesService();
   }
 
-  findAll = async (_req: Request, res: Response, next: NextFunction) => {
+  findAll = async (req: Request, res: Response, next: NextFunction) => {
+    const { inProgress } = req.query;
     try {
+      if (inProgress) {
+        const matches = await this.matchesService.findByProgress(inProgress === 'true');
+        return res.status(200).json(matches);
+      }
       const matches = await this.matchesService.findAll();
-
-      res.status(200).json(matches);
+      return res.status(200).json(matches);
     } catch (error) {
       next(error);
     }
   };
-
-  // roleInfo = async (req: Request, res: Response, _next: NextFunction) => {
-  //   const { id } = req.params;
-  //   const team = await this.matchesService.findById(Number(id));
-  //   res.status(200).json(team);
-  // };
 }
