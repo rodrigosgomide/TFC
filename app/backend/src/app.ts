@@ -1,5 +1,6 @@
 import * as express from 'express';
 import router from './routes/router';
+import { ICustomError } from './ultis/customError';
 
 class App {
   public app: express.Express;
@@ -26,12 +27,13 @@ class App {
     this.app.use(router);
 
     this.app.use((
-      error: Error,
+      error: ICustomError,
       _req: express.Request,
       res: express.Response,
       _next: express.NextFunction,
     ) => {
-      res.status(501).json(error.message);
+      if (error.status) return res.status(error.status).json({ message: error.message });
+      return res.status(501).json(error.message);
     });
   }
 
