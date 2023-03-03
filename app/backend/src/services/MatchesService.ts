@@ -3,6 +3,7 @@ import Matches from '../database/models/MatchesModel';
 import Teams from '../database/models/TeamsModel';
 import IScore from '../interfaces/IScore';
 import INewMatch from '../interfaces/INewMatch';
+import customError from '../ultis/customError';
 
 export default class MatchesService {
   model;
@@ -63,6 +64,17 @@ export default class MatchesService {
 
   async insertMatch(matchInfo: INewMatch): Promise<object> {
     const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = matchInfo;
+
+    const homeTeam = await Teams.findByPk(homeTeamId);
+    const awayTeam = await Teams.findByPk(awayTeamId);
+
+    if (!homeTeam || !awayTeam) {
+      throw customError(422, 'There is no team with such id!') as Error;
+    }
+
+    if (homeTeamId === awayTeamId) {
+      throw customError(422, 'It is not possible to create a match with two equal teams') as Error;
+    }
 
     const newMatch = await this.model.create({
       homeTeamId,
