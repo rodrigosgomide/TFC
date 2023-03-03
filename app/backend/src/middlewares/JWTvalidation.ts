@@ -9,7 +9,6 @@ const usersService = new UsersService();
 
 export default async function JTWvalidation(req: Request, res: Response, next:NextFunction) {
   const token = req.header('Authorization');
-  console.log(token);
 
   if (!token || token.length === 0) {
     return res.status(401).json({ message: 'Token not found' });
@@ -20,7 +19,8 @@ export default async function JTWvalidation(req: Request, res: Response, next:Ne
 
     const user = await usersService.findByEmail({ email: decoded.data.email });
 
-    res.status(200).json({ role: user?.role });
+    // res.status(200).json({ role: user?.role });
+    req.body = { role: user?.role };
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Token must be a valid token' });

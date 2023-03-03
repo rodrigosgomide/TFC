@@ -18,9 +18,7 @@ export default class UsersController {
     }
   };
 
-  // roleInfo = async (req: Request, res: Response, _next: NextFunction) => {
-  //   const { id } = req.params;
-  //   const team = await this.usersService.findById(Number(id));
-  //   res.status(200).json(team);
-  // };
+  roleInfo = async (req: Request, res: Response, _next: NextFunction) => {
+    res.status(200).json(req.body);
+  };
 }

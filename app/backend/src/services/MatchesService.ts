@@ -36,8 +36,14 @@ export default class MatchesService {
     return matches;
   }
 
-//   async findById(id: number): Promise<ITeams | null> {
-//     const teams = await this.model.findByPk(id);
-//     return teams;
-//   }
+  async updateById(id: number): Promise<object> {
+    await this.model.update({ inProgress: false }, {
+      where: {
+        id,
+        inProgress: true,
+      },
+    });
+
+    return { message: 'Finished' };
+  }
 }

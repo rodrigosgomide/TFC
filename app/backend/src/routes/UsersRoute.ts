@@ -8,6 +8,6 @@ const usersRouter = Router();
 const usersController = new UsersController();
 
 usersRouter.post('/', UserValidation, usersController.login);
-usersRouter.get('/role', JTWvalidation);
+usersRouter.get('/role', JTWvalidation, usersController.roleInfo);
 
 export default usersRouter;
