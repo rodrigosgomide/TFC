@@ -25,4 +25,13 @@ export default class LeaderboardsController {
       next(error);
     }
   };
+
+  globalLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const globalLeaderboard = await this.leaderboardsService.leaderboardGenerator('global');
+      return res.status(200).json(globalLeaderboard);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
