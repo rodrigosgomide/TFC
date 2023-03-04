@@ -10,8 +10,17 @@ export default class LeaderboardsController {
 
   homeLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const homeLeaderboard = await this.leaderboardsService.homeLeaderboard();
+      const homeLeaderboard = await this.leaderboardsService.leaderboardGenerator('homeTeam');
       return res.status(200).json(homeLeaderboard);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  awayLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const awayLeaderboard = await this.leaderboardsService.leaderboardGenerator('awayTeam');
+      return res.status(200).json(awayLeaderboard);
     } catch (error) {
       next(error);
     }

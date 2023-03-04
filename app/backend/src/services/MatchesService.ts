@@ -85,16 +85,16 @@ export default class MatchesService {
     return newMatch;
   }
 
-  async findHomeByName(name: string): Promise<ITeams[]> {
+  async findByName(name: string, homeAway: string): Promise<ITeams[]> {
     const matches = await this.model.findAll({
       where: {
         inProgress: false,
       },
       include:
         { model: Teams,
-          as: 'homeTeam',
+          as: homeAway,
           where: { teamName: name },
-          attributes: { exclude: ['id', 'homeTeamId'] } },
+          attributes: { exclude: ['id', 'homeTeamId', 'awayTeamdId'] } },
       attributes: {
         exclude: ['awayTeamId', 'homeTeamId', 'id', 'inProgress', 'home_team_id', 'away_team_id'],
       },

@@ -6,6 +6,6 @@ const leaderboardsRouter = Router();
 const leaderboardsController = new LeaderboardsController();
 
 leaderboardsRouter.get('/home', leaderboardsController.homeLeaderboard);
-// teamsRouter.get('/:id', LeaderboardsController.findById);
+leaderboardsRouter.get('/away', leaderboardsController.awayLeaderboard);
 
 export default leaderboardsRouter;
