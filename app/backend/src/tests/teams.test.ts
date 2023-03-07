@@ -1,54 +1,81 @@
-// import * as sinon from 'sinon';
-// import * as chai from 'chai';
-// // @ts-ignore
-// import chaiHttp = require('chai-http');
+import * as sinon from 'sinon';
+import * as chai from 'chai';
+// @ts-ignore
+import chaiHttp = require('chai-http');
 
-// import { app } from '../app';
-// import Teams from '../database/models/teamsModel';
-// import {teamsMock} from './mocks/teams.mock';
+import { app } from '../app';
+import Teams from '../database/models/TeamsModel';
+import TeamsService from '../services/TeamsService';
+import { teamsMock, teamsNamesMock } from './mocks/teams.mock';
+import { Model } from 'sequelize';
 
-// import { Response } from 'superagent';
+import { Response } from 'superagent';
+import TeamsController from '../controllers/TeamsController';
 
-// chai.use(chaiHttp);
+chai.use(chaiHttp);
 
-// const { expect } = chai;
+const { expect } = chai;
 
-// describe('Seu teste', () => {
-//   /**
-//    * Exemplo do uso de stubs com tipos
-//    */
+describe('Seu teste', () => {
 
-//   // let chaiHttpResponse: Response;
+  let chaiHttpResponse: Response;
 
-//   // before(async () => {
-//   //   sinon
-//   //     .stub(Example, "findOne")
-//   //     .resolves({
-//   //       ...<Seu mock>
-//   //     } as Example);
-//   // });
 
-//   // after(()=>{
-//   //   (Example.findOne as sinon.SinonStub).restore();
-//   // })
+  afterEach(()=>{
+    sinon.restore()
+  })
 
-//   // it('...', async () => {
-//   //   chaiHttpResponse = await chai
-//   //      .request(app)
-//   //      ...
+  it('Testa se o serviço findAll retorna todos os times', async function () {
+    sinon
+    .stub(Teams, 'findAll')
+    .resolves(teamsMock as unknown as Model<any, any>[])
+    const teamsService = new TeamsService()
+    const result = await teamsService.findAll()
+    expect(result).to.be.equal(teamsMock)
+})
 
-//   //   expect(...)
-//   // });
+it('Testa se o serviço findById retorna um time', async function () {
+  sinon
+  .stub(Teams, 'findByPk')
+  .resolves(teamsMock[0] as unknown as Model<any, any>)
+  const teamsService = new TeamsService()
+  const result = await teamsService.findById(1)
+  expect(result).to.be.equal(teamsMock[0])
+})
 
-//   it('Verifica se uma lista de times é retornada', async () => {
-//     let chaiHttpResponse: Response
- 
-//     sinon
-//       .stub(Teams, "findAll")
-//       .resolves(teamsMock as any);
+it('Testa se o serviço findAllNames retorna somente o nome dos times', async function () {
+  sinon
+  .stub(Teams, 'findAll')
+  .resolves(teamsNamesMock as unknown as Model<any, any>[])
+  const teamsService = new TeamsService()
+  const result = await teamsService.findAllNames()
+  expect(result).to.be.equal(teamsNamesMock)
+})
 
-//   const teams = await Teams.findAll()
+it('Testa se o controller findAll retorna todos os times', async function () {
+  sinon
+  .stub(Teams, 'findAll')
+  .resolves(teamsMock as unknown as Model<any, any>[])
 
-//     expect(teams).to.be.eq(teamsMock);
-//   });
-// });
+  const result = await chai
+  .request(app)
+  .get('/teams');
+  expect(result.status).to.be.equal(200)
+  expect(result.body).to.be.deep.equal(teamsMock)
+})
+
+it('Testa se o controller findById retorna todos os times', async function () {
+  sinon
+  .stub(Teams, 'findByPk')
+  .resolves(teamsMock[0] as unknown as Model<any, any>)
+
+  const result = await chai
+  .request(app)
+  .get('/teams/1');
+  expect(result.status).to.be.equal(200)
+  expect(result.body).to.be.deep.equal(teamsMock[0])
+
+})
+
+
+}); 
