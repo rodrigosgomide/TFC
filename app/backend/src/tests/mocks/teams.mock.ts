@@ -1,21 +1,15 @@
+import Teams from "../../database/models/TeamsModel";
 import ITeams from "../../interfaces/ITeams";
 
-export const teamsMock: ITeams[] = [
-    {
-      id:1,
-      teamName: 'Avaí/Kindermann',
-    },
-    {
-      id: 2,
-      teamName: 'Bahia',
-    }
-]
+export const teamsMock: ITeams[] = [new Teams(
+  {
+    id:1,
+    teamName: 'Avaí/Kindermann',
+  }
+)]
 
-export const teamsNamesMock = [
+export const teamsNamesMock = [new Teams(
   {
     teamName: 'Avaí/Kindermann',
-  },
-  {
-    teamName: 'Bahia',
   }
-]
+)]
